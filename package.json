@@ -4,7 +4,8 @@
   "description": "Web Atoms Unit Test Library",
   "main": "index.js",
   "scripts": {
-    "postversion": "git push --follow-tags"
+    "postversion": "git push --follow-tags",
+    "test": "exit 0"
   },
   "repository": {
     "type": "git",

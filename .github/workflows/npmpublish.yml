@@ -16,7 +16,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: npm install typescript
       - run: npm install
-      - run: npm run build
+      - run: tsc
       - run: npm run test
       - run: npm publish --access public
         env:

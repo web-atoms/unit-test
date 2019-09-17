@@ -1,6 +1,6 @@
 {
   "name": "@web-atoms/unit-test",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Web Atoms Unit Test Library",
   "main": "index.js",
   "scripts": {

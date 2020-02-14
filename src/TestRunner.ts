@@ -2,22 +2,7 @@
 import TestMethod from "./TestMethod";
 
 import * as colors from "colors/safe";
-
-declare var global: any;
-
-global.window = {};
-
-global.UMD = {
-    // tslint:disable-next-line: typedef
-    resolvePath(v) {
-        return v;
-    }
-};
-
-global.DI = global.UMD;
-
-global.window.UMD = global.UMD;
-global.window.DI = global.DI;
+import sandbox from "./Sandbox";
 
 export default class TestRunner {
 
@@ -77,25 +62,25 @@ export default class TestRunner {
         }
     }
 
-    public runTest(f: any, target: any): Promise<any> {
-        return new Promise((resolve, reject) => {
-            // try {
-                const t: any = f.apply(target);
-                if (t && t.then) {
-                    t.then((v) => {
-                        resolve(v);
-                    });
-                    t.catch((e) => {
-                        reject(e);
-                    });
-                    return;
-                }
-                resolve();
-            // } catch (ex) {
-            //     reject(ex);
-            // }
-        });
-    }
+    // public runTest(f: any, target: any): Promise<any> {
+    //     return new Promise((resolve, reject) => {
+    //         // try {
+    //             const t: any = f.apply(target);
+    //             if (t && t.then) {
+    //                 t.then((v) => {
+    //                     resolve(v);
+    //                 });
+    //                 t.catch((e) => {
+    //                     reject(e);
+    //                 });
+    //                 return;
+    //             }
+    //             resolve();
+    //         // } catch (ex) {
+    //         //     reject(ex);
+    //         // }
+    //     });
+    // }
 
     public async run(filter?: string): Promise<any> {
 
@@ -130,25 +115,7 @@ export default class TestRunner {
 
         const promises = this.tests.map( async (peek) => {
             this.executed.push(peek);
-            const test = new (peek.testClass)();
-            try {
-                await test.init();
-
-                // tslint:disable-next-line:ban-types
-                const fx: Function = test[peek.name];
-
-                await this.runTest(fx, test);
-            } catch (e) {
-                peek.error = e;
-            } finally {
-                peek.logText = test.logText;
-                try {
-                    await test.dispose();
-                } catch (er) {
-                    peek.error = peek.error ?
-                        peek.error + er : er;
-                }
-            }
+            await sandbox(peek);
         });
 
         await Promise.all(promises);

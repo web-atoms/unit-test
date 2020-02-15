@@ -19,8 +19,14 @@ Module.prototype.require = r;
 
 declare var global;
 
-global.window = {};
-global.bridge = {};
+// tslint:disable-next-line: no-var-requires
+const { JSDOM } = require("jsdom");
+const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
+global.window = dom.window;
+global.document = dom.document;
+
+// global.window = {};
+// global.bridge = {};
 
 global.UMD = {
     // tslint:disable-next-line: typedef

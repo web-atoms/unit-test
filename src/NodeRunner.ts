@@ -68,6 +68,9 @@ declare var process: any;
 
 const arg = process.argv ? ( process.argv[2] ) : null;
 
+// tslint:disable-next-line: no-console
+// console.log(JSON.stringify(process.argv));
+
 if (arg) {
     loadScripts(arg);
 } else {

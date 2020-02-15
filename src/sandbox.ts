@@ -42,7 +42,7 @@ declare var global: any;
 
 export default async function sandbox(args: TestMethod) {
 
-    if (isNode && false) {
+    if (isNode) {
 
         const vm = require("vm");
 
@@ -59,6 +59,7 @@ export default async function sandbox(args: TestMethod) {
         
         // global.window.UMD = global.UMD;
         // global.window.DI = global.DI;
+
         await new Promise((resolve, reject) => {
             const g = {
                 document: null,
@@ -80,15 +81,19 @@ export default async function sandbox(args: TestMethod) {
                 CustomEvent: null,
             };
             g.DI = g.UMD;
-            g.window.DI = g.UMD;
-            g.window.UMD = g.UMD;
-            g.window.bridge = g.bridge;
+            const { JSDOM } = require("jsdom");
+            const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
+            g.window = dom.window;
+            g.document = dom.window.document;
             g.CustomEvent = function CustomEvent(type: string, p?: any) {
                 const e = document.createEvent("CustomEvent");
                 const pe = p ? { ... p } : {};
                 e.initCustomEvent(type, pe.bubble, pe.cancelable, pe.detail);
                 return e;
             };
+            g.window.DI = g.UMD;
+            g.window.UMD = g.UMD;
+            g.window.bridge = g.bridge;
             vm.createContext(g);
 
             const script = new vm.Script(`

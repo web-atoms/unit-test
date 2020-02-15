@@ -1,1 +1,1 @@
-const runner = require("./dist/TestRunner");
+require("./dist/NodeRunner");

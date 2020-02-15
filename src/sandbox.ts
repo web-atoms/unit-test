@@ -4,6 +4,11 @@ import TestMethod from "./TestMethod";
 const isNode = typeof window !== "undefined" ? false: true;
 
 async function runTestPromise(args: TestMethod) {
+
+    // setup JSDOM...
+    if (isNode) {
+    }
+
     const {testClass, name} = args;
     let t = null;
     try {
@@ -36,7 +41,7 @@ declare var global: any;
 
 export default async function sandbox(args: TestMethod) {
 
-    if (isNode) {
+    if (isNode && false) {
 
         const vm = require("vm");
 
@@ -56,9 +61,11 @@ export default async function sandbox(args: TestMethod) {
         await new Promise((resolve, reject) => {
             const g = {
                 document: null,
+                bridge: {},
                 window: {
                     DI: null,
-                    UMD: null
+                    UMD: null,
+                    bridge: null
                 },
                 UMD: {
                     resolvePath(v) {
@@ -74,6 +81,7 @@ export default async function sandbox(args: TestMethod) {
             g.DI = g.UMD;
             g.window.DI = g.UMD;
             g.window.UMD = g.UMD;
+            g.window.bridge = g.bridge;
             g.CustomEvent = function CustomEvent(type: string, p?: any) {
                 const e = document.createEvent("CustomEvent");
                 const pe = p ? { ... p } : {};

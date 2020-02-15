@@ -1,3 +1,5 @@
+import TestRunner from "./TestRunner";
+
 declare var require: any;
 // tslint:disable-next-line: no-var-requires
 const { statSync, readdirSync } = require("fs") as any;
@@ -15,6 +17,23 @@ const r = function(name) {
 r.resolve = (oldRequire as any).resolve;
 Module.prototype.require = r;
 
+declare var global;
+
+global.window = {};
+global.bridge = {};
+
+global.UMD = {
+    // tslint:disable-next-line: typedef
+    resolvePath(v) {
+        return v;
+    }
+};
+
+global.DI = global.UMD;
+
+global.window.UMD = global.UMD;
+global.window.DI = global.DI;
+
 function loadScripts(start) {
     const ss = statSync(start);
     if (ss.isDirectory()) {
@@ -25,7 +44,7 @@ function loadScripts(start) {
     } else {
         if (start.endsWith(".js")) {
             const md = start.substr(0, start.length - 3);
-            require("." + md);
+            require(process.cwd() + "/" + md);
         }
     }
 }
@@ -41,3 +60,18 @@ if (arg) {
 } else {
     loadScripts("./");
 }
+
+// now run tests..
+
+TestRunner.instance.run().then(() => {
+    process.exit(0);
+}).catch((e) => {
+    // tslint:disable-next-line: no-console
+    console.error(e.message);
+    if (e.stack) {
+        // tslint:disable-next-line: no-console
+        console.error(e.stack);
+    }
+    process.exit(1);
+
+} );

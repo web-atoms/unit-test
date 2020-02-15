@@ -23,7 +23,7 @@ declare var global;
 const { JSDOM } = require("jsdom");
 const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
 global.window = dom.window;
-global.document = dom.document;
+global.document = dom.window.document;
 
 // global.window = {};
 // global.bridge = {};

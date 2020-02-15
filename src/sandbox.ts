@@ -45,7 +45,7 @@ declare var global: any;
 
 export default async function sandbox(args: TestMethod) {
 
-    if (isNode) {
+    if (isNode && false) {
 
         const vm = require("vm");
 

@@ -7,6 +7,10 @@ async function runTestPromise(args: TestMethod) {
 
     // setup JSDOM...
     if (isNode) {
+        const { JSDOM } = require("jsdom");
+        const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
+        global.window = dom.window;
+        global.document = dom.document;
     }
 
     const {testClass, name} = args;
@@ -41,7 +45,7 @@ declare var global: any;
 
 export default async function sandbox(args: TestMethod) {
 
-    if (isNode && false) {
+    if (isNode) {
 
         const vm = require("vm");
 

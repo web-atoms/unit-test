@@ -94,7 +94,7 @@ export default async function sandbox(args: TestMethod) {
             };
             vm.createContext(g);
 
-            const script = vm.Script(`
+            const script = new vm.Script(`
             const t = global.testCase;
             t.runTestPromise(t).then(t.resolve).catch(t.reject);`);
             script.runInContext(g);

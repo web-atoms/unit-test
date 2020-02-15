@@ -2,7 +2,7 @@
 import TestMethod from "./TestMethod";
 
 import * as colors from "colors/safe";
-import sandbox from "./Sandbox";
+import sandbox from "./sandbox";
 
 export default class TestRunner {
 

@@ -40,6 +40,13 @@ global.DI = global.UMD;
 global.window.UMD = global.UMD;
 global.window.DI = global.DI;
 
+global.CustomEvent = function CustomEvent(type: string, p?: any) {
+    const e = document.createEvent("CustomEvent");
+    const pe = p ? { ... p } : {};
+    e.initCustomEvent(type, pe.bubble, pe.cancelable, pe.detail);
+    return e;
+};
+
 function loadScripts(start) {
     const ss = statSync(start);
     if (ss.isDirectory()) {

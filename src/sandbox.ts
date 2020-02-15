@@ -23,6 +23,9 @@ async function runTestPromise(args: TestMethod) {
     } catch (e) {
         args.error = e.stack ? `${e.message}\r\n${e.stack}` : e.toString();
     } finally {
+        if (t && t.logText) {
+            args.logText = (args.logText || "")  + t.logText;
+        }
         try {
             await t.dispose();
         } catch (ex) {
@@ -30,9 +33,6 @@ async function runTestPromise(args: TestMethod) {
                 (args.error || "")
                 + (ex.stack ? (`${ex.message}\r\n${ex.stack}`) : ex.toString());
         }
-    }
-    if (t && t.logText) {
-        args.logText = (args.logText || "")  + t.logText;
     }
 }
 

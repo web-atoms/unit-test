@@ -1,14 +1,9 @@
 import TestItem from "./TestItem";
 import TestMethod from "./TestMethod";
 
-const isNode = typeof window !== "undefined" ? false: true;
+const isNode = typeof window !== "undefined" ? false : true;
 
 async function runTestPromise(args: TestMethod) {
-
-    // setup JSDOM...
-    if (isNode) {
-
-    }
 
     const {testClass, name} = args;
     let t = null;
@@ -82,7 +77,7 @@ export default async function sandbox(args: TestMethod) {
             };
             g.DI = g.UMD;
             const { JSDOM } = require("jsdom");
-            const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
+            const dom = new JSDOM(`<!DOCTYPE html><body><p>Hello world</p></body></html>`);
             g.window = dom.window;
             g.document = dom.window.document;
             g.CustomEvent = function CustomEvent(type: string, p?: any) {

@@ -115,7 +115,12 @@ export default class TestRunner {
 
         const promises = this.tests.map( async (peek) => {
             this.executed.push(peek);
-            await sandbox(peek);
+            try {
+                await sandbox(peek);
+            } catch (e) {
+                peek.error = peek.error || "";
+                peek.error += (e.stack ? (e.toString() + "\r\n" + e.stack) : e);
+            }
         });
 
         await Promise.all(promises);

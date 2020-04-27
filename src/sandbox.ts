@@ -13,7 +13,7 @@ async function runTestPromise(args: TestMethod) {
     const {testClass, name} = args;
     let t = null;
     try {
-        t = new (testClass);
+        t = new (testClass)();
         await t.init();
 
         const r = t[name]();
@@ -103,7 +103,7 @@ export default async function sandbox(args: TestMethod) {
         });
 
     } else {
-        await runTestPromise(args)
+        await runTestPromise(args);
     }
 
 }

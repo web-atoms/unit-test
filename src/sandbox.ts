@@ -41,26 +41,29 @@ export default async function sandbox(args: TestMethod) {
 
         const vm = require("vm");
 
-        await new Promise((resolve, reject) => {
-            const g = {
-                document: null,
-                bridge: {},
-                window: {
-                    DI: null,
-                    UMD: null,
-                    bridge: null
-                },
-                UMD: {
-                    resolvePath(v) {
-                        return v;
-                    }
-                },
+        const g = {
+            document: null,
+            bridge: {},
+            window: {
                 DI: null,
-                testCase: {
-                    ... args, runTestPromise, resolve, reject
-                },
-                CustomEvent: null,
-            };
+                UMD: null,
+                bridge: null
+            },
+            UMD: {
+                resolvePath(v) {
+                    return v;
+                }
+            },
+            DI: null,
+            testCase: {
+                ... args, runTestPromise
+            },
+            CustomEvent: null,
+        };
+
+        await new Promise((resolve, reject) => {
+            (g.testCase as any).resolve = resolve;
+            (g.testCase as any).reject = reject;
             g.DI = g.UMD;
             const { JSDOM } = require("jsdom");
             const dom = new JSDOM(`<!DOCTYPE html><body><p>Hello world</p></body></html>`);
@@ -81,9 +84,10 @@ export default async function sandbox(args: TestMethod) {
             const t = testCase;
             t.runTestPromise(t).then(t.resolve).catch(t.reject);`);
             script.runInContext(g);
-            args.error = g.testCase.error;
-            args.logText = g.testCase.logText;
         });
+
+        args.error = g.testCase.error;
+        args.logText = g.testCase.logText;
 
     } else {
         await runTestPromise(args);

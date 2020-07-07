@@ -41,20 +41,6 @@ export default async function sandbox(args: TestMethod) {
 
         const vm = require("vm");
 
-        // global.window = {};
-        
-        // global.UMD = {
-        //     // tslint:disable-next-line: typedef
-        //     resolvePath(v) {
-        //         return v;
-        //     }
-        // };
-        
-        // global.DI = global.UMD;
-        
-        // global.window.UMD = global.UMD;
-        // global.window.DI = global.DI;
-
         await new Promise((resolve, reject) => {
             const g = {
                 document: null,
@@ -95,6 +81,8 @@ export default async function sandbox(args: TestMethod) {
             const t = testCase;
             t.runTestPromise(t).then(t.resolve).catch(t.reject);`);
             script.runInContext(g);
+            args.error = g.testCase.error;
+            args.logText = g.testCase.logText;
         });
 
     } else {

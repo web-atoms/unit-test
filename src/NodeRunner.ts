@@ -56,6 +56,9 @@ function loadScripts(start) {
         }
     } else {
         if (start.endsWith(".js")) {
+            if (start.endsWith(".sys.js") || start.endsWith(".esm.js")) {
+                return;
+            }
             const md = start.substr(0, start.length - 3);
             require(process.cwd() + "/" + md);
         }

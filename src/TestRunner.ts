@@ -5,7 +5,7 @@ import * as colors from "colors/safe";
 import sandbox from "./sandbox";
 import { create } from "xmlbuilder2";
 import { XMLBuilder } from "xmlbuilder2/lib/interfaces";
-import { formatTime } from "./Format";
+import { formatSeconds, formatTime } from "./Format";
 export default class TestRunner {
 
     // tslint:disable-next-line:variable-name
@@ -39,7 +39,7 @@ export default class TestRunner {
                 }
                 time += iterator.time;
             }
-            return builder.ele(tagName,{ id: name, name, tests, failures, time: formatTime(time) })
+            return builder.ele(tagName,{ id: name, name, tests, failures, time: formatSeconds(time) })
         };
         const suites = createNode(doc, "testsuites", id, this.executed) ;
         const groups = new Map<string, TestMethod[]>();
@@ -80,7 +80,7 @@ export default class TestRunner {
                     const f = testCase.ele("failure", {
                         id: name,
                         name,
-                        time: formatTime(time)
+                        time: formatSeconds(time)
                     }).txt(iterator.error);
                     continue;
                 }

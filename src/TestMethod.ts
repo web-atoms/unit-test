@@ -1,4 +1,3 @@
-import { formatTime } from "./Format";
 import { ILogInfo } from "./TestItem";
 
 export default class TestMethod {

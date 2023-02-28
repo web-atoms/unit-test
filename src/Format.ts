@@ -8,6 +8,8 @@ const prefix = (n: number, m: number = 2) => {
     return s;
 };
 
+export const formatSeconds = (n) =>  (n / 1000).toFixed(2);
+
 export const formatTime = (n) => {
     let milliseconds = n % 1000;
     let seconds = n / 1000;

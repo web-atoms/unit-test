@@ -1,3 +1,5 @@
+import { formatTime } from "./Format";
+import { ILogInfo } from "./TestItem";
 
 export default class TestMethod {
 
@@ -7,15 +9,23 @@ export default class TestMethod {
 
     public testClass: any;
 
-    public error: any;
+    public time: number;
 
-    public logText: string;
+    public errors: string[];
+
+    public logs: ILogInfo[];
+
+    public get error() {
+        return this.errors.join("\n");
+    }
 
     constructor(desc: any, name: string, category: string, target: any) {
         this.description = desc;
         this.name = name;
         this.category = category;
         this.testClass = target;
+        this.logs = [];
+        this.errors = [];
     }
 
     get path(): string {

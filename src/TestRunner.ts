@@ -3,7 +3,9 @@ import TestMethod from "./TestMethod";
 
 import * as colors from "colors/safe";
 import sandbox from "./sandbox";
-
+import { create } from "xmlbuilder2";
+import { XMLBuilder } from "xmlbuilder2/lib/interfaces";
+import { formatTime } from "./Format";
 export default class TestRunner {
 
     // tslint:disable-next-line:variable-name
@@ -21,6 +23,70 @@ export default class TestRunner {
     constructor() {
         this.tests = [];
         this.executed = [];
+    }
+
+    public xmlReport(pathRewriter: (p: string) => string = (p) => p) {
+        const doc = create({ version: 1.0});
+        const id = Date.now() + "_suite";
+        const createNode = (builder: XMLBuilder, tagName, name, list :TestMethod[]) => {
+            let tests = 0;
+            let failures = 0;
+            let time = 0;
+            for (const iterator of list) {
+                tests++;
+                if (iterator.errors.length) {
+                    failures++;
+                }
+                time += iterator.time;
+            }
+            return builder.ele(tagName,{ id: name, name, tests, failures, time: formatTime(time) })
+        };
+        const suites = createNode(doc, "testsuites", id, this.executed) ;
+        const groups = new Map<string, TestMethod[]>();
+        for (const iterator of this.executed) {
+            const category = iterator.category;
+            let list = groups.get(category);
+            if(!list) {
+                list = [];
+                groups.set(category, list);
+            }
+            list.push(iterator);
+        }
+
+        const buildNode = (x: XMLBuilder, i: TestMethod) => {
+            const logs = i.logs.filter((x) => !x.filePath).join("");
+            const files = i.logs.filter((x) => x.filePath);
+            if(logs) {
+                x.ele("system-out").txt(logs);
+            }
+            if(files.length) {
+                for (const iterator of files) {
+                    x.ele("system-out").txt(`[[ATTACHMENT|${pathRewriter(iterator.filePath)}]]`);
+                }
+            }
+        };
+
+        for (const [name, list] of groups.entries()) {
+            const suite = createNode(suites, "testsuite", name, list);
+
+            for (const iterator of list) {
+                const { name, time } = iterator;
+
+                const testCase = createNode(suite, "testcase", name, [iterator]);
+
+                buildNode(testCase, iterator);
+                if (iterator.errors.length) {
+                    // add failure...
+                    const f = testCase.ele("failure", {
+                        id: name,
+                        name,
+                        time: formatTime(time)
+                    }).txt(iterator.error);
+                    continue;
+                }
+            }
+        }
+        return doc.end({ prettyPrint: true });
     }
 
     public printAll(): void {
@@ -41,14 +107,15 @@ export default class TestRunner {
 
         for (const result of this.executed) {
             if (result.error) {
-                errorLogs.push(`${result.category} > ${result.description} failed ${result.error.message}.`);
+                errorLogs.push(`${result.category} > ${result.description} failed ${result.error}.`);
                 errorLogs.push(result.error);
                 errors ++;
             } else {
                 console.log(`${result.category} > ${result.description} succeeded.`);
             }
-            if (result.logText) {
-                console.log(`\t\t${result.logText}`);
+            const logText = result.logs.map((x) => x.body).join();
+            if (logText) {
+                console.log(`\t\t${logText}`);
             }
         }
 
@@ -118,8 +185,7 @@ export default class TestRunner {
             try {
                 await sandbox(peek);
             } catch (e) {
-                peek.error = peek.error || "";
-                peek.error += (e.stack ? (e.toString() + "\r\n" + e.stack) : e);
+                peek.errors.push(e.stack ? (e.toString() + "\r\n" + e.stack) : e);
             }
         });
 

@@ -1,4 +1,14 @@
 {
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "args": [
+                "-ExecutionPolicy",
+                "Bypass"
+            ]
+        }
+   },
+   "terminal.integrated.defaultProfile.windows": "PowerShell",
     "cSpell.words": [
         "Akash",
         "downlevel",

@@ -1,12 +1,12 @@
 import TestItem from "./TestItem";
 import TestMethod from "./TestMethod";
 
-const isNode = typeof window !== "undefined" ? false : true;
+const isNode = typeof window === "undefined";
 
 async function runTestPromise(args: TestMethod) {
 
     const {testClass, name} = args;
-    let t = null;
+    let t: TestItem = null;
     try {
         t = new (testClass)();
         await t.init();
@@ -16,18 +16,17 @@ async function runTestPromise(args: TestMethod) {
             await r;
         }
     } catch (e) {
-        args.error = e.stack ? `${e.message}\r\n${e.stack}` : e.toString();
+        args.errors.push(e.stack ? `${e.message}\r\n${e.stack}` : e.toString());
     } finally {
-        if (t && t.logText) {
-            args.logText = (args.logText || "")  + t.logText;
+        if (t?.logs?.length) {
+            args.logs.push( ... t.logs);
         }
         try {
             await t.dispose();
         } catch (ex) {
-            args.error =
-                (args.error || "")
-                + (ex.stack ? (`${ex.message}\r\n${ex.stack}`) : ex.toString());
+            args.errors.push(ex.stack ? (`${ex.message}\r\n${ex.stack}`) : ex.toString());
         }
+        args.time = (t as any).done();
     }
 }
 
@@ -37,7 +36,7 @@ declare var global: any;
 
 export default async function sandbox(args: TestMethod) {
 
-    if (isNode) {
+    if (!isNode) {
 
         const vm = require("vm");
 
@@ -86,8 +85,8 @@ export default async function sandbox(args: TestMethod) {
             script.runInContext(g);
         });
 
-        args.error = g.testCase.error;
-        args.logText = g.testCase.logText;
+        args.errors = g.testCase.errors;
+        args.logs = g.testCase.logs;
 
     } else {
         await runTestPromise(args);

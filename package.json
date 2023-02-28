@@ -22,10 +22,10 @@
     "url": "https://github.com/web-atoms/unit-test/issues"
   },
   "homepage": "https://github.com/web-atoms/unit-test#readme",
-  "devDependencies": {},
   "dependencies": {
     "colors": "^1.4.0",
     "jsdom": "^16.4.0",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "xmlbuilder2": "^3.0.2"
   }
 }

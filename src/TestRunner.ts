@@ -26,7 +26,7 @@ export default class TestRunner {
     }
 
     public xmlReport(pathRewriter: (p: string) => string = (p) => p) {
-        const doc = create({ version: 1.0});
+        const doc = create({ version: "1.0"});
         const id = Date.now() + "_suite";
         const createNode = (builder: XMLBuilder, tagName, name, list :TestMethod[]) => {
             let tests = 0;

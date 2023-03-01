@@ -182,7 +182,7 @@ export default class TestRunner {
             return;
         }
 
-        const all = this.tests.map((x) => x);
+        const all = [].concat(this.tests);
         while(all.length) {
             const iterator = all.splice(0, this.maxParallelRun);
             await this._run(iterator);            

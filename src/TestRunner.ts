@@ -184,7 +184,7 @@ export default class TestRunner {
 
         const all = this.tests.map((x) => x);
         while(all.length) {
-            const iterator = all.slice(0, this.maxParallelRun);
+            const iterator = all.splice(0, this.maxParallelRun);
             await this._run(iterator);            
         }
         this.printAll();

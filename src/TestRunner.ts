@@ -20,6 +20,8 @@ export default class TestRunner {
     public tests: TestMethod[];
     public executed: TestMethod[];
 
+    public maxParallelRun = 0;
+
     constructor() {
         this.tests = [];
         this.executed = [];
@@ -174,13 +176,24 @@ export default class TestRunner {
             }
         }
 
-        return this._run();
+        if (this.maxParallelRun <= 0) {
+            await this._run(this.tests);
+            this.printAll();
+            return;
+        }
+
+        const all = this.tests.map((x) => x);
+        while(all.length) {
+            const iterator = all.slice(0, this.maxParallelRun);
+            await this._run(iterator);            
+        }
+        this.printAll();
 
     }
 
-    public async _run(): Promise<any> {
+    public async _run(tests: TestMethod[]): Promise<any> {
 
-        const promises = this.tests.map( async (peek) => {
+        const promises = tests.map( async (peek) => {
             this.executed.push(peek);
             try {
                 await sandbox(peek);
@@ -190,8 +203,6 @@ export default class TestRunner {
         });
 
         await Promise.all(promises);
-
-        this.printAll();
 
         // const peek: TestMethod = this.tests.shift();
 

@@ -21,13 +21,13 @@ async function runTestPromise(args: TestMethod) {
         }
         args.errors.push(e.stack ? `${e.message}\r\n${e.stack}` : e.toString());
     } finally {
-        if (t?.logs?.length) {
-            args.logs.push( ... t.logs);
-        }
         try {
             await t.dispose();
         } catch (ex) {
             args.errors.push(ex.stack ? (`${ex.message}\r\n${ex.stack}`) : ex.toString());
+        }
+        if (t?.logs?.length) {
+            args.logs.push( ... t.logs);
         }
         args.time = (t as any).done();
     }

@@ -12,6 +12,8 @@ export default class TestItem {
 
     public readonly startTime = Date.now();
 
+    public failed: any;
+
     public get time() {
         return this.endTime - this.startTime;
     }

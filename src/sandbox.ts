@@ -16,6 +16,9 @@ async function runTestPromise(args: TestMethod) {
             await r;
         }
     } catch (e) {
+        if (t) {
+            t.failed = e;
+        }
         args.errors.push(e.stack ? `${e.message}\r\n${e.stack}` : e.toString());
     } finally {
         if (t?.logs?.length) {

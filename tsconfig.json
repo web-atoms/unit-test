@@ -10,6 +10,7 @@
         "downlevelIteration": false,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
+        "skipLibCheck": true,
         "lib": [
             "es6",
             "dom"

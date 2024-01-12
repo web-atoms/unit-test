@@ -24,8 +24,8 @@
   "homepage": "https://github.com/web-atoms/unit-test#readme",
   "dependencies": {
     "colors": "^1.4.0",
-    "jsdom": "^16.4.0",
+    "jsdom": "^23.2.0",
     "reflect-metadata": "^0.1.13",
-    "xmlbuilder2": "^3.0.2"
+    "xmlbuilder2": "^3.1.1"
   }
 }

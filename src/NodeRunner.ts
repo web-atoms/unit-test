@@ -9,7 +9,7 @@ const Module = require("module");
 // tslint:disable-next-line: ban-types
 const oldRequire: Function = Module.prototype.require;
 const r = function(name) {
-    if (/\.(svg|jpg|gif|png)$/i.test(name)) {
+    if (/\.(svg|jpg|gif|png|less|css)$/i.test(name)) {
         return name;
     }
     return oldRequire.call(this, name);

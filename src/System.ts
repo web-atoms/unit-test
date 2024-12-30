@@ -12,7 +12,7 @@ export default class System {
         let i = 0;
 
         const { setters, execute } = fx((n, e) => {
-            if (e !== void 0) {
+            if (e !== void 0 || typeof e === "string") {
                 module.exports[n] = e;
             } else {
                 module.exports = n;

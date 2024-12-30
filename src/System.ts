@@ -19,8 +19,10 @@ export default class System {
             }
         }, this);
 
+        const dir = path.dirname(location);
+
         for (const element of imports) {
-            const x = require( path.join(location, element));
+            const x = require( path.join(dir, element));
             const s = setters[i++];
             s(x);
         }

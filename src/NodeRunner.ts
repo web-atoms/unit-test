@@ -19,7 +19,7 @@ r.resolve = (oldRequire as any).resolve;
 Module.prototype.require = r;
 const oldCompile = Module.prototype._compile;
 Module.prototype._compile = function (content, filename, format) {
-    content = content.replace(/System\.register\s{0,20}\(/, `System.register(${ JSON.stringify(filename)},`);
+    content = content.replace(/System\.register\s{0,20}\(/, `System.register(module,`);
     return oldCompile.call(this, content, filename, format);
 }
 declare var global;

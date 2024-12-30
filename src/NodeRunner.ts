@@ -1,3 +1,4 @@
+import System from "./System";
 import TestRunner from "./TestRunner";
 
 declare var require: any;
@@ -16,7 +17,11 @@ const r = function(name) {
 };
 r.resolve = (oldRequire as any).resolve;
 Module.prototype.require = r;
-
+const oldCompile = Module.prototype._compile;
+Module.prototype._compile = function (content, filename, format) {
+    content = content.replace(/System\.register\s{0,20}\(/, `System.register("${filename}",`);
+    return oldCompile.call(this, content, filename, format);
+}
 declare var global;
 
 // tslint:disable-next-line: no-var-requires
@@ -39,6 +44,8 @@ global.DI = global.UMD;
 
 global.window.UMD = global.UMD;
 global.window.DI = global.DI;
+global.System = System;
+global.window.System = System;
 
 global.CustomEvent = function CustomEvent(type: string, p?: any) {
     const e = document.createEvent("CustomEvent");

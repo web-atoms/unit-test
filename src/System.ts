@@ -19,7 +19,7 @@ export default class System {
             }
         }, this);
 
-        const dir = path.dirname(context.path);
+        const dir = context.path;
 
         for (const element of imports) {
             const x = require( path.join(dir, element));

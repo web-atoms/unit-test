@@ -1,11 +1,11 @@
 // tslint:disable:no-console
-import TestMethod from "./TestMethod";
+import TestMethod from "./TestMethod.js";
 
-import * as colors from "colors/safe";
-import sandbox from "./sandbox";
+import * as colors from "colors/safe.js";
+import sandbox from "./sandbox.js";
 import { create } from "xmlbuilder2";
-import { XMLBuilder } from "xmlbuilder2/lib/interfaces";
-import { formatSeconds, formatTime } from "./Format";
+import { XMLBuilder } from "xmlbuilder2/lib/interfaces.js";
+import { formatSeconds, formatTime } from "./Format.js";
 export default class TestRunner {
 
     // tslint:disable-next-line:variable-name

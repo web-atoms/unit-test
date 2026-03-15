@@ -1,5 +1,5 @@
-import TestItem from "./TestItem";
-import TestMethod from "./TestMethod";
+import TestItem from "./TestItem.js";
+import TestMethod from "./TestMethod.js";
 
 const isNode = typeof window === "undefined";
 

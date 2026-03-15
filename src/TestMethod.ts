@@ -1,4 +1,4 @@
-import { ILogInfo } from "./TestItem";
+import { ILogInfo } from "./TestItem.js";
 
 export default class TestMethod {
 

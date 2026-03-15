@@ -1,6 +1,6 @@
-import TestItem from "./TestItem";
-import TestMethod from "./TestMethod";
-import TestRunner from "./TestRunner";
+import TestItem from "./TestItem.js";
+import TestMethod from "./TestMethod.js";
+import TestRunner from "./TestRunner.js";
 
 export default function Test<T extends TestItem>(name: string | T, propertyKey?: string, descriptor?: any): any {
 

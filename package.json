@@ -1,8 +1,9 @@
 {
   "name": "@web-atoms/unit-test",
-  "version": "1.0.54",
+  "version": "2.0.0",
   "description": "Web Atoms Unit Test Library",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "postversion": "git push --follow-tags",
     "test": "exit 0"

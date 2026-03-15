@@ -1,5 +1,5 @@
-import System from "./System";
-import TestRunner from "./TestRunner";
+import System from "./System.js";
+import TestRunner from "./TestRunner.js";
 
 declare var require: any;
 // tslint:disable-next-line: no-var-requires

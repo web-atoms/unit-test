@@ -71,6 +71,8 @@ export default async function sandbox(args: TestMethod) {
             const dom = new JSDOM(`<!DOCTYPE html><body><p>Hello world</p></body></html>`);
             g.window = dom.window;
             g.document = dom.window.document;
+            (g.window as any).requestAnimationFrame ??= (x) => setTimeout(x, 1);
+            (g as any).requestAnimationFrame = dom.window.requestAnimationFrame;
             g.CustomEvent = function CustomEvent(type: string, p?: any) {
                 const e = document.createEvent("CustomEvent");
                 const pe = p ? { ... p } : {};

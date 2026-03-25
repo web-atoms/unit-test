@@ -29,6 +29,7 @@ const { JSDOM } = require("jsdom");
 const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
 global.window = dom.window;
 global.document = dom.window.document;
+dom.window.requestAnimationFrame ??= (x) => setTimeout(x, 1);
 global.requestAnimationFrame = dom.window.requestAnimationFrame;
 global.alert = dom.window.alert;
 

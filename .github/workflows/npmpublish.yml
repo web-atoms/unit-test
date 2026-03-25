@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org/
-      - run: npm install -g typescript
+      - run: npm install -g typescript@5.9.3
       - run: npm install
       - run: tsc
       - run: npm run test
